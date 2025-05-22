@@ -1,0 +1,57 @@
+% Power Meter Readings from Fibre Coupling
+% --------------------------------------------------------------
+% using the TLPM.NET driver
+
+clc;
+clear;
+
+% Specify path to the Thorlabs TLPM .NET DLL (update this if needed)
+dllPath = 'C:\Program Files\IVI Foundation\VISA\Win64\Bin\TLPM_64.dll';
+
+% Check if DLL exists
+if ~exist(dllPath, 'file')
+    error('Thorlabs TLPM DLL not found at specified path: %s', dllPath);
+end
+
+% Load the Thorlabs .NET assembly
+NET.addAssembly(dllPath);
+
+% Create power meter object
+powerMeter = Thorlabs.TLPM();
+
+% Find connected devices
+numDevices = powerMeter.findRsrc(0);
+if numDevices < 1
+    error('No Thorlabs power meter devices found.');
+end
+
+% Get the first resource name
+[~, resourceName] = powerMeter.getRsrcName(0, char(ones(1, 512)));
+fprintf('Connecting to device: %s\n', resourceName);
+
+% Open connection to the power meter
+status = powerMeter.open(resourceName, false, false);
+if status ~= 0
+    error('Failed to open power meter. Status code: %d', status);
+end
+
+% Set power unit to Watts (0 = Watts, 1 = dBm)
+powerMeter.setPowerUnit(0);
+
+% Read and display power measurements in a loop
+fprintf('Reading power values:\n');
+for i = 1:10
+    pause(1);  % Pause 1 second between readings
+    [status, powerVal] = powerMeter.measPower(0);
+    if status ~= 0
+        fprintf('Error reading power at t = %d s. Status code: %d\n', i, status);
+    else
+        fprintf('Power at t = %2d s: %.6f W\n', i, powerVal);
+    end
+end
+
+% Close and clean up
+powerMeter.close();
+clear powerMeter;
+
+fprintf('Measurement complete. Device connection closed.\n');
