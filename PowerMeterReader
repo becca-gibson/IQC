@@ -2,8 +2,22 @@
 % --------------------------------------------------------------
 % using the TLPM.NET driver
 
+% Clear the window
 clc;
+% Remove all objects
 clear;
+
+% Define the serial port, baud rate, and timeout
+serialPort = 'COM1';
+BaudRate = 10000;
+timeout = 30;
+
+% Create serial object
+s = serialport(serialPort, BaudRate, 'timeout', timeout)
+
+% Configure Serial Settings
+configureTerminator(s, "CR/LF"); % Set terminator to match "\r\n"
+
 
 % Specify path to the Thorlabs TLPM .NET DLL (update this if needed)
 dllPath = 'C:\Program Files\IVI Foundation\VISA\Win64\Bin\TLPM_64.dll';
