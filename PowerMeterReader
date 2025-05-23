@@ -60,7 +60,7 @@ for i = 1:10
     if status ~= 0
         fprintf('Error reading power at t = %d s. Status code: %d\n', i, status);
     else
-        fprintf('Power at t = %2d s: %.6f W\n', i, powerVal);
+        fprintf('Power at t = %2d s: %.3f W\n', i, powerVal);
     end
 end
 
