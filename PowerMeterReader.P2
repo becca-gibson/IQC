@@ -1,3 +1,8 @@
+% Power Meter Reader
+% Via Serial Port Connection for PM200
+% Preliminary Revision 2 (P2)
+% ---------------------------------------------------------------
+
 % Clear and setup
 clc;
 clear;
