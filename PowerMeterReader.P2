@@ -1,0 +1,29 @@
+% Clear and setup
+clc;
+clear;
+
+% Define serial port and configuration
+serialPort = 'COM3';  % Adjust this to match your PM200's COM port
+baudRate = 19200;     % PM200 default baud rate
+timeout = 10;         % seconds
+
+% Create serial port object
+s = serialport(serialPort, baudRate, 'Timeout', timeout);
+
+% Set line terminator to CR+LF (PM200 uses \r\n)
+configureTerminator(s, "CR/LF");
+
+% Flush any previous data
+flush(s);
+
+% Request power measurement
+writeline(s, 'READ?');
+
+% Read the response
+response = readline(s);
+
+% Display result
+fprintf('Measured power: %s W\n', response);
+
+% Clean up
+clear s;
